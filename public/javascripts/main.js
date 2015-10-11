@@ -3,6 +3,10 @@ var pusher;
 var nettuts_channel;
 var has_chat = false;
 
+Pusher.log = function(msg) {
+    console.log(msg);
+};
+
 $('#chat_widget_login_button').click(function() {
     $(this).hide(); //hide the login button
     $('#chat_widget_login_loader').show(); //show the loader gif
@@ -48,7 +52,7 @@ $('#chat_widget_login_button').click(function() {
                     //this appends the new connected client's name to the online list
                     //and updates the online count as well
                     $('#chat_widget_online_list').append('<li class="chat_widget_member" ' +
-                    'id="chat_widget_member_' + member.id + '">' + member.info.username + '</li>');
+                    'id="chat_widget_member_' + member.id + '">' + member.info.name + '</li>');
                     updateOnlineCount();
                 });
                  
