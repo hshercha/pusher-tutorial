@@ -24,6 +24,11 @@ $('#chat_widget_login_button').click(function() {
             });
             Pusher.channel_auth_endpoint = '/api/pusher_auth';
             nettuts_channel = pusher.subscribe('presence-nettuts'); //join the presence-nettuts channel
+
+            pusher.connection.bind('state_change', function(states) {
+                // states = {previous: 'oldState', current: 'newState'}
+                document.title = 'Pusher (' + states.current + ')';
+            });
              
             pusher.connection.bind('connected', function() { //bind a function after we've connected to Pusher
                 $('#chat_widget_login_loader').hide(); //hide the loading gif
