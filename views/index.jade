@@ -21,6 +21,7 @@ block content
         .clear
         #chat_widget_input_container
           form#chat_widget_form(method='post')
+            label#chat_widget_label(for='chat_widget_input') &nbsp;
             input#chat_widget_input(type='text')
             input#chat_widget_button(type='submit', value='Chat')
             img#chat_widget_loader(src='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif', alt='Sending...')

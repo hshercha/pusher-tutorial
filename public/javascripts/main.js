@@ -7,6 +7,13 @@ Pusher.log = function(msg) {
     console.log(msg);
 };
 
+//client events: able to emit pusher event from js console/client, will bypassing our app server
+//need to enable this on PUsher admin portal for this app
+//Pusher.instances[0].channel('presence-nettuts').trigger('client-new_message', {username: 'tonyagain', message: 'message from js console'})
+//
+//similating receving an event message from the js console
+//Pusher.instances[0].channel('presence-nettuts').emit('new_message', {username: 'tonyagain', message: 'message from js console'})
+
 $('#chat_widget_login_button').click(function() {
     $(this).hide(); //hide the login button
     $('#chat_widget_login_loader').show(); //show the loader gif
@@ -71,6 +78,46 @@ $('#chat_widget_login_button').click(function() {
 
                 nettuts_channel.bind('new_message', function(data) {
                     newMessageCallback(data);
+                });
+
+                var userTypingHandle = null;
+                var typingUsers = [];
+
+                //client events, one client could broadcast this event via the Pusher service to all other clients
+                nettuts_channel.bind('client-typing-message', function(data) {
+                    var label = $('#chat_widget_label');
+                    if (data.typing) {
+                        typingUsers.push(data.username);
+                        label.text(typingUsers.join(', ') + (typingUsers.length === 1 ? ' is' : ' are') + ' typing...');
+                    } else {
+                        typingUsers.splice(typingUsers.indexOf(data.username), 1);
+                        if (typingUsers.length > 0) {
+                            label.text(typingUsers.join(', ') + (typingUsers.length === 1 ? ' is' : ' are') + ' typing...');
+                        } else {
+                            label.text('');    
+                        }
+                    }
+                });
+
+                $('#chat_widget_input').keydown(function() {
+                    if (!userTypingHandle) {
+                        nettuts_channel.trigger('client-typing-message', {
+                            typing: true,
+                            username: username
+                        });
+                    } else {
+                        clearTimeout(userTypingHandle);
+                        userTypingHandle = null;
+                    }
+
+                    userTypingHandle = setTimeout(function() {
+                        nettuts_channel.trigger('client-typing-message', {
+                            typing: false,
+                            username: username
+                        });
+
+                        userTypingHandle = null;
+                    }, 3000);
                 });
             });
         });
