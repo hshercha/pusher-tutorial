@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  #chat_widget_container
+      #chat_widget_login
+        label(for='chat_widget_username') Name:
+        input#chat_widget_username(type='text')
+        input#chat_widget_login_button(type='button', value='Login!')
+        img#chat_widget_login_loader(src='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif', alt='Logging in...')
+      #chat_widget_main_container
+        #chat_widget_messages_container
+          #chat_widget_messages
+            chat messages go here
+        #chat_widget_online
+          p.
+            Who's Online(#[span(id='chat_widget_counter') 0])
+          ul#chat_widget_online_list
+            li online users go here
+        .clear
+        #chat_widget_input_container
+          form#chat_widget_form(method='post')
+            input#chat_widget_input(type='text')
+            input#chat_widget_button(type='submit', value='Chat')
+            img#chat_widget_loader(src='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif', alt='Sending...')
+
+  script(src='http://code.jquery.com/jquery-2.1.4.min.js')
+  script(src='/javascripts/main.js')
+  script(src='http://js.pusherapp.com/1.9/pusher.min.js')
